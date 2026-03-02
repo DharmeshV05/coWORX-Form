@@ -25,33 +25,33 @@ const plans = [
 
 const galleryImages = [
   {
-    src: 'https://images.unsplash.com/photo-1497366216548-37526070297c?w=800&h=600&fit=crop',
-    alt: 'Modern open workspace with natural lighting',
+    src: '/images/workspace.png',
+    alt: 'coWORX open workspace with ergonomic workstations',
     title: 'Open Workspace',
   },
   {
-    src: 'https://images.unsplash.com/photo-1497366811353-6870744d04b2?w=800&h=600&fit=crop',
-    alt: 'Professional meeting room with glass walls',
+    src: '/images/meeting-room.png',
+    alt: 'Private meeting room and cabin at coWORX',
     title: 'Meeting Room',
   },
   {
-    src: 'https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=800&h=600&fit=crop',
-    alt: 'Collaborative team working area',
-    title: 'Team Collaboration',
+    src: '/images/storefront.png',
+    alt: 'coWORX coworking space storefront in Global City',
+    title: 'Our Space',
   },
   {
-    src: 'https://images.unsplash.com/photo-1556761175-4b46a572b786?w=800&h=600&fit=crop',
-    alt: 'Ergonomic dedicated desks',
+    src: '/images/interior-wide.png',
+    alt: 'Wide view of coWORX workstations and seating',
+    title: 'Workstations',
+  },
+  {
+    src: '/images/workspace.png',
+    alt: 'Dedicated desks with glass partitions',
     title: 'Dedicated Desks',
   },
   {
-    src: 'https://images.unsplash.com/photo-1497215842964-222b430dc094?w=800&h=600&fit=crop',
-    alt: 'Stylish lounge and break area',
-    title: 'Lounge Area',
-  },
-  {
-    src: 'https://images.unsplash.com/photo-1524758631624-e2822e304c36?w=800&h=600&fit=crop',
-    alt: 'Premium private office cabins',
+    src: '/images/meeting-room.png',
+    alt: 'Private cabins for focused work',
     title: 'Private Cabins',
   },
 ]
@@ -146,7 +146,7 @@ export default function Home() {
               loop
               playsInline
               className="w-full h-full object-cover"
-              poster="https://images.unsplash.com/photo-1497366216548-37526070297c?w=1920&h=1080&fit=crop"
+              poster="/images/interior-wide.png"
             >
               <source
                 src="https://videos.pexels.com/video-files/3255275/3255275-uhd_2560_1440_25fps.mp4"
@@ -309,6 +309,112 @@ export default function Home() {
           </div>
         </section>
 
+        {/* ========== EARLY JOINER PRICING SECTION ========== */}
+        <section className="relative py-20 md:py-28 overflow-hidden">
+          {/* Background matching branding */}
+          <div className="absolute inset-0 bg-gradient-to-br from-slate-900 via-[#1a2744] to-[#0f1b33]" />
+          <div className="absolute inset-0 pointer-events-none overflow-hidden">
+            <div className="absolute top-[-10%] right-[-5%] w-[35%] h-[35%] rounded-full bg-orange-500/10 blur-[100px]" />
+            <div className="absolute bottom-[-10%] left-[-5%] w-[30%] h-[30%] rounded-full bg-amber-500/10 blur-[100px]" />
+          </div>
+
+          <div className="container mx-auto px-4 relative z-10">
+            <div className="grid md:grid-cols-2 gap-12 md:gap-16 items-center max-w-6xl mx-auto">
+              {/* Left - Image */}
+              <motion.div
+                initial={{ opacity: 0, x: -40 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.8 }}
+                className="relative"
+              >
+                <div className="rounded-3xl overflow-hidden shadow-2xl border-2 border-orange-500/20">
+                  <Image
+                    src="/images/workspace.png"
+                    alt="coWORX workspace - Early Joiner offer"
+                    width={700}
+                    height={500}
+                    className="w-full h-72 md:h-96 object-cover"
+                  />
+                </div>
+                {/* Floating badge */}
+                <div className="absolute -bottom-4 -left-2 md:-left-4 bg-gradient-to-r from-orange-500 to-amber-500 text-white px-5 py-3 rounded-xl shadow-2xl flex items-center gap-2 z-10">
+                  <Sparkles className="h-5 w-5" />
+                  <div>
+                    <p className="text-sm font-bold">Limited Time Offer</p>
+                    <p className="text-[10px] text-orange-100">For Early Joiners Only</p>
+                  </div>
+                </div>
+              </motion.div>
+
+              {/* Right - Content */}
+              <motion.div
+                initial={{ opacity: 0, x: 40 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.8, delay: 0.2 }}
+                className="space-y-6"
+              >
+                <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-orange-500/10 border border-orange-500/20 text-orange-400 text-xs font-bold uppercase tracking-wider">
+                  <Crown className="h-3.5 w-3.5" />
+                  Early Joiner Exclusive
+                </div>
+                <h2 className="text-3xl md:text-5xl font-extrabold tracking-tight text-white leading-tight">
+                  Early Joiner{' '}
+                  <span className="bg-gradient-to-r from-orange-400 to-amber-400 bg-clip-text text-transparent">Pricing</span>
+                </h2>
+                <p className="text-base md:text-lg text-slate-300 leading-relaxed">
+                  &ldquo;Work smarter, connect deeper, grow faster — start your journey with us.&rdquo;
+                </p>
+
+                {/* Benefits */}
+                <div className="space-y-3 pt-2">
+                  {[
+                    { label: 'Free AI Credits*', icon: Zap },
+                    { label: 'Unlimited Coffee', icon: Coffee },
+                    { label: 'Meeting Room Access', icon: Users },
+                    { label: 'High-Speed Wi-Fi (100 Mbps)', icon: Wifi },
+                  ].map((benefit) => (
+                    <div key={benefit.label} className="flex items-center gap-3 bg-gradient-to-r from-orange-500/90 to-amber-500/90 rounded-xl px-5 py-3 shadow-lg shadow-orange-500/10">
+                      <benefit.icon className="h-5 w-5 text-white flex-shrink-0" />
+                      <span className="text-white font-semibold text-sm md:text-base">{benefit.label}</span>
+                    </div>
+                  ))}
+                </div>
+
+                <div className="flex flex-col sm:flex-row gap-3 pt-4">
+                  <Button
+                    size="lg"
+                    className="bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white px-8 py-6 rounded-full shadow-xl shadow-orange-500/25 active:scale-95 transition-all font-bold"
+                    onClick={() => setShowForm(true)}
+                  >
+                    Book Now
+                    <ArrowRight className="ml-2 h-5 w-5" />
+                  </Button>
+                  <a
+                    href="https://wa.me/919272707827?text=Hi%20I%27m%20interested%20in%20coWORX%20early%20joiner%20pricing"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <Button
+                      size="lg"
+                      variant="outline"
+                      className="w-full border-green-500/40 bg-green-500/10 text-green-400 hover:bg-green-500/20 hover:text-green-300 px-8 py-6 rounded-full transition-all font-bold"
+                    >
+                      <Phone className="mr-2 h-5 w-5" />
+                      WhatsApp Us
+                    </Button>
+                  </a>
+                </div>
+
+                <p className="text-xs text-slate-500">
+                  * Terms and conditions apply. Visit <a href="https://coworx.app" target="_blank" rel="noopener noreferrer" className="text-orange-400 hover:text-orange-300 underline">coworx.app</a> for details.
+                </p>
+              </motion.div>
+            </div>
+          </div>
+        </section>
+
         {/* ========== ABOUT / SHOWCASE SECTION with Images ========== */}
         <section ref={aboutRef} className="relative py-20 md:py-32 bg-slate-50 dark:bg-slate-900/30 border-y border-slate-200/60 dark:border-slate-800/60 overflow-hidden">
           <div className="container mx-auto px-4">
@@ -324,8 +430,8 @@ export default function Home() {
                   <div className="space-y-4">
                     <div className="rounded-2xl overflow-hidden shadow-xl">
                       <Image
-                        src="https://images.unsplash.com/photo-1497366216548-37526070297c?w=600&h=400&fit=crop"
-                        alt="Modern coworking workspace"
+                        src="/images/interior-wide.png"
+                        alt="coWORX modern workspace"
                         width={600}
                         height={400}
                         className="w-full h-48 md:h-56 object-cover hover:scale-105 transition-transform duration-500"
@@ -333,8 +439,8 @@ export default function Home() {
                     </div>
                     <div className="rounded-2xl overflow-hidden shadow-xl">
                       <Image
-                        src="https://images.unsplash.com/photo-1556761175-4b46a572b786?w=600&h=300&fit=crop"
-                        alt="Dedicated desk workspace"
+                        src="/images/meeting-room.png"
+                        alt="coWORX private cabin"
                         width={600}
                         height={300}
                         className="w-full h-32 md:h-40 object-cover hover:scale-105 transition-transform duration-500"
@@ -344,8 +450,8 @@ export default function Home() {
                   <div className="space-y-4 mt-8">
                     <div className="rounded-2xl overflow-hidden shadow-xl">
                       <Image
-                        src="https://images.unsplash.com/photo-1497366811353-6870744d04b2?w=600&h=300&fit=crop"
-                        alt="Glass-walled meeting room"
+                        src="/images/storefront.png"
+                        alt="coWORX storefront"
                         width={600}
                         height={300}
                         className="w-full h-32 md:h-40 object-cover hover:scale-105 transition-transform duration-500"
@@ -353,8 +459,8 @@ export default function Home() {
                     </div>
                     <div className="rounded-2xl overflow-hidden shadow-xl">
                       <Image
-                        src="https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=600&h=400&fit=crop"
-                        alt="Collaborative workspace"
+                        src="/images/workspace.png"
+                        alt="coWORX collaborative workspace"
                         width={600}
                         height={400}
                         className="w-full h-48 md:h-56 object-cover hover:scale-105 transition-transform duration-500"
@@ -455,7 +561,7 @@ export default function Home() {
                   loop
                   playsInline
                   className="w-full aspect-video object-cover"
-                  poster="https://images.unsplash.com/photo-1497215842964-222b430dc094?w=1280&h=720&fit=crop"
+                  poster="/images/workspace.png"
                 >
                   <source
                     src="https://videos.pexels.com/video-files/6774204/6774204-hd_1920_1080_25fps.mp4"
@@ -576,7 +682,7 @@ export default function Home() {
                   onClick={(e) => e.stopPropagation()}
                 >
                   <Image
-                    src={galleryImages[selectedImage].src.replace('w=800&h=600', 'w=1400&h=900')}
+                    src={galleryImages[selectedImage].src}
                     alt={galleryImages[selectedImage].alt}
                     width={1400}
                     height={900}
@@ -836,7 +942,7 @@ export default function Home() {
                       </div>
                       <div>
                         <p className="font-semibold text-sm text-slate-900 dark:text-white">Phone</p>
-                        <p className="text-sm text-slate-600 dark:text-slate-400">+91 98XX XXX XXX</p>
+                        <p className="text-sm text-slate-600 dark:text-slate-400">+91 92727 07827</p>
                       </div>
                     </div>
                     <div className="flex items-start gap-3">
@@ -845,7 +951,7 @@ export default function Home() {
                       </div>
                       <div>
                         <p className="font-semibold text-sm text-slate-900 dark:text-white">Email</p>
-                        <p className="text-sm text-slate-600 dark:text-slate-400">hello@coworx.in</p>
+                        <p className="text-sm text-slate-600 dark:text-slate-400">hello@coworx.app</p>
                       </div>
                     </div>
                     <div className="flex items-start gap-3">
@@ -879,8 +985,8 @@ export default function Home() {
           {/* Background image */}
           <div className="absolute inset-0 z-0">
             <Image
-              src="https://images.unsplash.com/photo-1497215842964-222b430dc094?w=1920&h=1080&fit=crop"
-              alt="Beautiful coworking space"
+              src="/images/interior-wide.png"
+              alt="coWORX coworking space"
               width={1920}
               height={1080}
               className="w-full h-full object-cover"
@@ -960,14 +1066,15 @@ export default function Home() {
               <p className="text-slate-400 text-sm leading-relaxed max-w-xs">
                 Premium coworking space designed for productivity, collaboration, and community in the heart of Global City, Virar West.
               </p>
-              <div className="flex gap-3 mt-6">
-                <a href="#" className="h-10 w-10 rounded-full bg-slate-800 hover:bg-orange-600 flex items-center justify-center transition-colors">
+              <p className="text-orange-400 text-sm font-semibold mt-2">coworx.app</p>
+              <div className="flex gap-3 mt-4">
+                <a href="https://instagram.com/coworx.app" target="_blank" rel="noopener noreferrer" className="h-10 w-10 rounded-full bg-slate-800 hover:bg-orange-600 flex items-center justify-center transition-colors">
                   <Instagram className="h-4 w-4" />
                 </a>
-                <a href="#" className="h-10 w-10 rounded-full bg-slate-800 hover:bg-orange-600 flex items-center justify-center transition-colors">
+                <a href="https://wa.me/919272707827" target="_blank" rel="noopener noreferrer" className="h-10 w-10 rounded-full bg-slate-800 hover:bg-green-600 flex items-center justify-center transition-colors">
                   <Phone className="h-4 w-4" />
                 </a>
-                <a href="#" className="h-10 w-10 rounded-full bg-slate-800 hover:bg-orange-600 flex items-center justify-center transition-colors">
+                <a href="mailto:hello@coworx.app" className="h-10 w-10 rounded-full bg-slate-800 hover:bg-orange-600 flex items-center justify-center transition-colors">
                   <Mail className="h-4 w-4" />
                 </a>
               </div>
@@ -1006,11 +1113,11 @@ export default function Home() {
                 </div>
                 <div className="flex items-center gap-2">
                   <Phone className="h-4 w-4 text-orange-500" />
-                  <span>+91 98XX XXX XXX</span>
+                  <span>+91 92727 07827</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <Mail className="h-4 w-4 text-orange-500" />
-                  <span>hello@coworx.in</span>
+                  <span>hello@coworx.app</span>
                 </div>
               </div>
             </div>
@@ -1026,6 +1133,21 @@ export default function Home() {
           </div>
         </div>
       </footer>
+
+      {/* Floating WhatsApp Button */}
+      <a
+        href="https://wa.me/919272707827?text=Hi%20I%27m%20interested%20in%20coWORX%20coworking%20space"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="fixed bottom-6 left-6 z-50 group"
+      >
+        <div className="flex items-center gap-3 bg-green-500 hover:bg-green-600 text-white pl-4 pr-5 py-3 rounded-full shadow-2xl shadow-green-500/30 transition-all duration-300 hover:scale-105 active:scale-95">
+          <svg viewBox="0 0 24 24" className="h-6 w-6 fill-current" xmlns="http://www.w3.org/2000/svg">
+            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
+          </svg>
+          <span className="text-sm font-bold hidden sm:inline">WhatsApp Us</span>
+        </div>
+      </a>
     </div>
   )
 }
