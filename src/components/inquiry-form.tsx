@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import * as z from 'zod'
@@ -23,7 +23,7 @@ import {
   FormMessage,
 } from '@/components/ui/form'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Loader2, CheckCircle2 } from 'lucide-react'
+import { Loader2, CheckCircle2, Armchair } from 'lucide-react'
 import { useToast } from '@/hooks/use-toast'
 import type { MembershipType } from '@/types/inquiry'
 
@@ -39,6 +39,21 @@ const membershipTypes: MembershipType[] = [
   'Monthly Plan',
 ]
 
+interface AvailableSeat {
+  id: string
+  zone: string
+  zoneName: string
+  status: string
+}
+
+const zoneLabels: Record<string, string> = {
+  A: 'Zone A · Entrance',
+  B: 'Zone B',
+  C: 'Zone C · Right Wall',
+  D: 'Zone D',
+  CR: 'Conference Room',
+}
+
 const formSchema = z.object({
   name: z.string().min(2, 'Name must be at least 2 characters'),
   mobile: z
@@ -48,6 +63,7 @@ const formSchema = z.object({
     .regex(/^\d{10}$/, 'Mobile number must contain only digits'),
   membershipType: z.string().min(1, 'Please select a membership type'),
   startDate: z.string().min(1, 'Please select a start date'),
+  seatPreference: z.string().optional(),
   notes: z.string().optional(),
 })
 
@@ -60,6 +76,8 @@ interface InquiryFormProps {
 export function InquiryForm({ onSuccess }: InquiryFormProps) {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isSuccess, setIsSuccess] = useState(false)
+  const [availableSeats, setAvailableSeats] = useState<AvailableSeat[]>([])
+  const [seatsLoading, setSeatsLoading] = useState(true)
   const { toast } = useToast()
 
   const form = useForm<FormData>({
@@ -69,9 +87,30 @@ export function InquiryForm({ onSuccess }: InquiryFormProps) {
       mobile: '',
       membershipType: undefined,
       startDate: '',
+      seatPreference: '',
       notes: '',
     },
   })
+
+  // Fetch available seats
+  const fetchAvailableSeats = async () => {
+    setSeatsLoading(true)
+    try {
+      const res = await fetch('/api/seats')
+      if (res.ok) {
+        const data: AvailableSeat[] = await res.json()
+        setAvailableSeats(data.filter(s => s.status === 'available'))
+      }
+    } catch (err) {
+      console.error('Failed to fetch seats:', err)
+    } finally {
+      setSeatsLoading(false)
+    }
+  }
+
+  useEffect(() => {
+    fetchAvailableSeats()
+  }, [])
 
   const onSubmit = async (data: FormData) => {
     setIsSubmitting(true)
@@ -81,7 +120,10 @@ export function InquiryForm({ onSuccess }: InquiryFormProps) {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(data),
+        body: JSON.stringify({
+          ...data,
+          seatPreference: data.seatPreference || undefined,
+        }),
       })
 
       if (!response.ok) {
@@ -90,13 +132,19 @@ export function InquiryForm({ onSuccess }: InquiryFormProps) {
       }
 
       setIsSuccess(true)
+
+      const selectedSeat = data.seatPreference
       toast({
         title: 'Success!',
-        description: 'Thank you! Our team will contact you shortly.',
+        description: selectedSeat
+          ? `Thank you! Seat ${selectedSeat} has been reserved for you. Our team will contact you shortly.`
+          : 'Thank you! Our team will contact you shortly.',
         variant: 'default',
       })
 
       form.reset()
+      // Refresh available seats since one may have been reserved
+      fetchAvailableSeats()
       onSuccess?.()
     } catch (error) {
       toast({
@@ -140,6 +188,13 @@ export function InquiryForm({ onSuccess }: InquiryFormProps) {
       </motion.div>
     )
   }
+
+  // Group available seats by zone for the dropdown
+  const seatsByZone = availableSeats.reduce<Record<string, AvailableSeat[]>>((acc, seat) => {
+    if (!acc[seat.zone]) acc[seat.zone] = []
+    acc[seat.zone].push(seat)
+    return acc
+  }, {})
 
   return (
     <Card className="w-full max-w-[500px] shadow-2xl border-slate-200/60 dark:border-slate-800/60 backdrop-blur-sm">
@@ -226,6 +281,61 @@ export function InquiryForm({ onSuccess }: InquiryFormProps) {
                   <FormControl>
                     <Input type="date" {...field} />
                   </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            {/* Seat Preference Dropdown */}
+            <FormField
+              control={form.control}
+              name="seatPreference"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="flex items-center gap-2">
+                    <Armchair className="h-4 w-4 text-orange-500" />
+                    Seat Preference (Optional)
+                  </FormLabel>
+                  <Select
+                    onValueChange={field.onChange}
+                    value={field.value}
+                  >
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder={
+                          seatsLoading
+                            ? "Loading available seats..."
+                            : availableSeats.length === 0
+                              ? "No seats available"
+                              : "Select your preferred seat"
+                        } />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      <SelectItem value="none">
+                        <span className="text-slate-500">No preference</span>
+                      </SelectItem>
+                      {Object.entries(seatsByZone).map(([zone, zoneSeats]) => (
+                        <div key={zone}>
+                          <div className="px-2 py-1.5 text-xs font-bold text-slate-400 uppercase tracking-wider border-t border-slate-100 dark:border-slate-800 mt-1">
+                            {zoneLabels[zone] || zone}
+                          </div>
+                          {zoneSeats.map(seat => (
+                            <SelectItem key={seat.id} value={seat.id}>
+                              <span className="flex items-center gap-2">
+                                <span className="w-2 h-2 rounded-full bg-green-500 inline-block" />
+                                Seat {seat.id}
+                                <span className="text-xs text-slate-400">· {seat.zoneName}</span>
+                              </span>
+                            </SelectItem>
+                          ))}
+                        </div>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <p className="text-xs text-slate-400 mt-1">
+                    {availableSeats.length} seat{availableSeats.length !== 1 ? 's' : ''} available · Selecting a seat will reserve it for you
+                  </p>
                   <FormMessage />
                 </FormItem>
               )}

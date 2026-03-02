@@ -13,6 +13,7 @@ export interface Inquiry {
   mobile: string;
   membershipType: MembershipType;
   startDate: string;
+  seatPreference?: string;
   notes?: string;
   createdAt: string;
 }
@@ -22,5 +23,7 @@ export interface CreateInquiryInput {
   mobile: string;
   membershipType: MembershipType;
   startDate: string;
+  seatPreference?: string;
   notes?: string;
 }
+

@@ -3,7 +3,7 @@
     "id": "A1",
     "zone": "A",
     "zoneName": "Entrance Side",
-    "status": "available"
+    "status": "reserved"
   },
   {
     "id": "A2",
@@ -39,7 +39,7 @@
     "id": "B1",
     "zone": "B",
     "zoneName": "Behind Zone A",
-    "status": "available"
+    "status": "reserved"
   },
   {
     "id": "C1",

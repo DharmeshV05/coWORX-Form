@@ -72,6 +72,7 @@ export function DataTable({ inquiries, onDelete }: DataTableProps) {
       Mobile: inquiry.mobile,
       'Membership Type': inquiry.membershipType,
       'Start Date': inquiry.startDate,
+      'Seat Preference': inquiry.seatPreference || 'None',
       Notes: inquiry.notes || '',
       'Submitted Date': new Date(inquiry.createdAt).toLocaleDateString(),
     }))
@@ -86,6 +87,7 @@ export function DataTable({ inquiries, onDelete }: DataTableProps) {
       { wch: 15 }, // Mobile
       { wch: 25 }, // Membership Type
       { wch: 15 }, // Start Date
+      { wch: 12 }, // Seat Preference
       { wch: 30 }, // Notes
       { wch: 15 }, // Submitted Date
     ]
@@ -176,6 +178,7 @@ export function DataTable({ inquiries, onDelete }: DataTableProps) {
                   <TableHead className="min-w-[120px]">Mobile</TableHead>
                   <TableHead className="min-w-[200px]">Membership Type</TableHead>
                   <TableHead className="min-w-[130px]">Start Date</TableHead>
+                  <TableHead className="min-w-[100px]">Seat</TableHead>
                   <TableHead className="min-w-[150px] hidden sm:table-cell">
                     Submitted At
                   </TableHead>
@@ -193,6 +196,15 @@ export function DataTable({ inquiries, onDelete }: DataTableProps) {
                     <TableCell>{inquiry.mobile}</TableCell>
                     <TableCell>{inquiry.membershipType}</TableCell>
                     <TableCell>{inquiry.startDate}</TableCell>
+                    <TableCell>
+                      {inquiry.seatPreference ? (
+                        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-semibold bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-400">
+                          🪑 {inquiry.seatPreference}
+                        </span>
+                      ) : (
+                        <span className="text-xs text-slate-400">—</span>
+                      )}
+                    </TableCell>
                     <TableCell className="hidden sm:table-cell">
                       {new Date(inquiry.createdAt).toLocaleDateString()}
                     </TableCell>

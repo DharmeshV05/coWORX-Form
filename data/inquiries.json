@@ -1,1 +1,21 @@
-[]
+[
+  {
+    "id": "inquiry_1772443627751_ydc58rbba",
+    "name": "Test User",
+    "mobile": "9876543210",
+    "membershipType": "Hot Desk",
+    "startDate": "2026-10-03",
+    "seatPreference": "A1",
+    "notes": "Testing seat reservation",
+    "createdAt": "2026-03-02T09:27:07.751Z"
+  },
+  {
+    "id": "inquiry_1772444994415_6vhxeuudw",
+    "name": "Test User",
+    "mobile": "9876543219",
+    "membershipType": "Day Pass / Hourly Access",
+    "startDate": "2026-03-04",
+    "seatPreference": "B1",
+    "createdAt": "2026-03-02T09:49:54.415Z"
+  }
+]
