@@ -4,11 +4,14 @@ import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { Navbar } from '@/components/navbar'
 import { DataTable } from '@/components/data-table'
+import { AdminSeatManager } from '@/components/admin-seat-manager'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Lock, LogOut } from 'lucide-react'
+import { Lock, LogOut, ClipboardList, Armchair } from 'lucide-react'
 import type { Inquiry } from '@/types/inquiry'
+
+type AdminTab = 'inquiries' | 'seats'
 
 export default function AdminPage() {
   const router = useRouter()
@@ -17,6 +20,7 @@ export default function AdminPage() {
   const [passwordError, setPasswordError] = useState('')
   const [inquiries, setInquiries] = useState<Inquiry[]>([])
   const [isLoading, setIsLoading] = useState(true)
+  const [activeTab, setActiveTab] = useState<AdminTab>('inquiries')
 
   // Simple password protection (for demo purposes)
   const ADMIN_PASSWORD = 'coworkx123'
@@ -136,7 +140,7 @@ export default function AdminPage() {
             <div>
               <h1 className="text-3xl font-bold mb-2">Admin Dashboard</h1>
               <p className="text-muted-foreground">
-                Manage membership enquiries
+                Manage enquiries & seat availability
               </p>
             </div>
             <div className="flex gap-3">
@@ -159,31 +163,68 @@ export default function AdminPage() {
             </div>
           </div>
 
-          {/* Content */}
-          {isLoading ? (
-            <div className="flex items-center justify-center py-12">
-              <div className="text-center">
-                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-600 mx-auto mb-4"></div>
-                <p className="text-muted-foreground">Loading enquiries...</p>
-              </div>
-            </div>
-          ) : (
-            <DataTable
-              inquiries={inquiries}
-              onDelete={handleDeleteInquiry}
-            />
+          {/* Tab Navigation */}
+          <div className="flex gap-1 mb-6 p-1 bg-slate-100 dark:bg-slate-900 rounded-xl w-fit">
+            <button
+              onClick={() => setActiveTab('inquiries')}
+              className={`flex items-center gap-2 px-5 py-2.5 rounded-lg text-sm font-semibold transition-all ${activeTab === 'inquiries'
+                ? 'bg-white dark:bg-slate-800 text-orange-600 shadow-sm'
+                : 'text-slate-500 hover:text-slate-700 dark:hover:text-slate-300'
+                }`}
+            >
+              <ClipboardList className="h-4 w-4" />
+              Enquiries
+              {inquiries.length > 0 && (
+                <span className="bg-orange-100 dark:bg-orange-900/30 text-orange-600 dark:text-orange-400 text-xs font-bold px-2 py-0.5 rounded-full">
+                  {inquiries.length}
+                </span>
+              )}
+            </button>
+            <button
+              onClick={() => setActiveTab('seats')}
+              className={`flex items-center gap-2 px-5 py-2.5 rounded-lg text-sm font-semibold transition-all ${activeTab === 'seats'
+                ? 'bg-white dark:bg-slate-800 text-orange-600 shadow-sm'
+                : 'text-slate-500 hover:text-slate-700 dark:hover:text-slate-300'
+                }`}
+            >
+              <Armchair className="h-4 w-4" />
+              Seat Management
+            </button>
+          </div>
+
+          {/* Tab Content */}
+          {activeTab === 'inquiries' && (
+            <>
+              {isLoading ? (
+                <div className="flex items-center justify-center py-12">
+                  <div className="text-center">
+                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-600 mx-auto mb-4"></div>
+                    <p className="text-muted-foreground">Loading enquiries...</p>
+                  </div>
+                </div>
+              ) : (
+                <DataTable
+                  inquiries={inquiries}
+                  onDelete={handleDeleteInquiry}
+                />
+              )}
+            </>
+          )}
+
+          {activeTab === 'seats' && (
+            <AdminSeatManager />
           )}
         </div>
-      </main>
+      </main >
 
       {/* Footer */}
-      <footer className="bg-slate-900 text-white py-6">
+      < footer className="bg-slate-900 text-white py-6" >
         <div className="container mx-auto px-4 text-center">
           <p className="text-slate-500 text-xs">
             © {new Date().getFullYear()} coWORX Admin Dashboard. All rights reserved.
           </p>
         </div>
-      </footer>
-    </div>
+      </footer >
+    </div >
   )
 }

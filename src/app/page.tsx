@@ -4,6 +4,7 @@ import { useState, useRef, useEffect } from 'react'
 import Image from 'next/image'
 import { Navbar } from '@/components/navbar'
 import { InquiryForm } from '@/components/inquiry-form'
+import { SeatMap } from '@/components/seat-map'
 import { Button } from '@/components/ui/button'
 import {
   ArrowRight, Wifi, Coffee, Users, Zap, MapPin, CheckCircle2,
@@ -696,6 +697,38 @@ export default function Home() {
               </motion.div>
             )}
           </AnimatePresence>
+        </section>
+
+        {/* ========== LIVE SEAT AVAILABILITY SECTION ========== */}
+        <section id="seats" className="relative py-20 md:py-32 overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-b from-[#0c1222] via-[#111827] to-[#0c1222]" />
+          <div className="absolute inset-0 pointer-events-none overflow-hidden">
+            <div className="absolute top-[10%] left-[-5%] w-[30%] h-[30%] rounded-full bg-blue-500/5 blur-[100px]" />
+            <div className="absolute bottom-[10%] right-[-5%] w-[25%] h-[25%] rounded-full bg-orange-500/5 blur-[100px]" />
+          </div>
+
+          <div className="container mx-auto px-4 relative z-10">
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.7 }}
+              className="text-center mb-14 md:mb-20"
+            >
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-green-500/10 border border-green-500/20 text-green-400 text-xs font-bold uppercase tracking-wider mb-5">
+                <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
+                Live Availability
+              </div>
+              <h2 className="text-3xl md:text-5xl font-extrabold tracking-tight text-white mb-4">
+                Seat <span className="bg-gradient-to-r from-orange-400 to-amber-400 bg-clip-text text-transparent">Availability</span>
+              </h2>
+              <p className="text-base md:text-lg text-slate-400 max-w-xl mx-auto">
+                Check real-time seat availability across all zones. Pick your perfect spot at coWORX.
+              </p>
+            </motion.div>
+
+            <SeatMap />
+          </div>
         </section>
 
         {/* ========== PLANS SECTION ========== */}
