@@ -1,10 +1,11 @@
 'use client'
 
 import Link from 'next/link'
+import Image from 'next/image'
 import { DarkModeToggle } from '@/components/dark-mode-toggle'
-import { Button } from '@/components/ui/button'
 import { useState } from 'react'
 import { Menu, X } from 'lucide-react'
+import { Button } from '@/components/ui/button'
 
 const navLinks = [
   { label: 'Space', href: '#gallery' },
@@ -16,14 +17,18 @@ export function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false)
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-white/10 bg-white/80 dark:bg-slate-950/80 backdrop-blur-xl supports-[backdrop-filter]:bg-white/60 dark:supports-[backdrop-filter]:bg-slate-950/60 transition-all duration-300">
+    <header className="sticky top-0 z-50 w-full border-b border-white/10 bg-white/80 dark:bg-[#0d2137]/80 backdrop-blur-xl supports-[backdrop-filter]:bg-white/60 dark:supports-[backdrop-filter]:bg-[#0d2137]/60 transition-all duration-300">
       <div className="container mx-auto flex h-20 items-center justify-between px-4 md:px-6">
         {/* Logo */}
         <Link href="/" className="flex items-center space-x-2 group">
-          <span className="text-2xl md:text-3xl font-black tracking-tighter transition-transform group-hover:scale-105">
-            <span className="text-orange-600">co</span>
-            <span className="text-slate-800 dark:text-slate-200">WORX</span>
-          </span>
+          <Image
+            src="/images/coworx.logo.png"
+            alt="coWORX Logo"
+            width={600}
+            height={160}
+            className="h-20 md:h-40 w-auto object-contain transition-transform group-hover:scale-105"
+            priority
+          />
         </Link>
 
         {/* Desktop Nav */}
@@ -32,7 +37,7 @@ export function Navbar() {
             <a
               key={link.label}
               href={link.href}
-              className="px-4 py-2 text-sm font-semibold text-slate-600 dark:text-slate-300 hover:text-orange-600 dark:hover:text-orange-400 transition-colors rounded-lg hover:bg-orange-50 dark:hover:bg-orange-950/30"
+              className="px-4 py-2 text-sm font-semibold text-[#2d3748] dark:text-[#edf2f7] hover:text-[#f5a623] dark:hover:text-[#f5a623] transition-colors rounded-lg hover:bg-[#f5a623]/10 dark:hover:bg-[#f5a623]/10"
             >
               {link.label}
             </a>
@@ -41,18 +46,14 @@ export function Navbar() {
 
         {/* Right side */}
         <div className="flex items-center gap-2 md:gap-4">
-          <Link href="/admin">
-            <Button variant="ghost" size="sm" className="hidden sm:inline-flex text-sm font-semibold hover:bg-orange-50 dark:hover:bg-orange-950/30 hover:text-orange-600">
-              Dashboard
-            </Button>
-          </Link>
-          <div className="h-6 w-px bg-slate-200 dark:bg-slate-800 hidden sm:block" />
+
+
           <DarkModeToggle />
 
           {/* Mobile menu toggle */}
           <button
             onClick={() => setMobileOpen(!mobileOpen)}
-            className="md:hidden p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+            className="md:hidden p-2 rounded-lg hover:bg-[#edf2f7] dark:hover:bg-[#1e3a5f] transition-colors"
             aria-label="Toggle menu"
           >
             {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
@@ -62,24 +63,18 @@ export function Navbar() {
 
       {/* Mobile Menu */}
       {mobileOpen && (
-        <div className="md:hidden bg-white dark:bg-slate-950 border-t border-slate-200 dark:border-slate-800 py-4 px-4 space-y-2">
+        <div className="md:hidden bg-white dark:bg-[#0d2137] border-t border-[#edf2f7] dark:border-[#1e3a5f] py-4 px-4 space-y-2">
           {navLinks.map((link) => (
             <a
               key={link.label}
               href={link.href}
               onClick={() => setMobileOpen(false)}
-              className="block px-4 py-3 text-sm font-semibold text-slate-600 dark:text-slate-300 hover:text-orange-600 rounded-lg hover:bg-orange-50 dark:hover:bg-orange-950/30 transition-colors"
+              className="block px-4 py-3 text-sm font-semibold text-[#2d3748] dark:text-[#edf2f7] hover:text-[#f5a623] rounded-lg hover:bg-[#f5a623]/10 dark:hover:bg-[#f5a623]/10 transition-colors"
             >
               {link.label}
             </a>
           ))}
-          <Link
-            href="/admin"
-            onClick={() => setMobileOpen(false)}
-            className="block px-4 py-3 text-sm font-semibold text-slate-600 dark:text-slate-300 hover:text-orange-600 rounded-lg hover:bg-orange-50 dark:hover:bg-orange-950/30 transition-colors"
-          >
-            Dashboard
-          </Link>
+
         </div>
       )}
     </header>

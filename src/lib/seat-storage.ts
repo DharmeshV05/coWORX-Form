@@ -10,7 +10,10 @@ export interface Seat {
     status: SeatStatus;
 }
 
-const SEATS_FILE = path.join(process.cwd(), 'data', 'seats.json');
+const isVercel = !!process.env.VERCEL;
+const SEATS_FILE = isVercel
+    ? path.join('/tmp', 'seats.json')
+    : path.join(process.cwd(), 'data', 'seats.json');
 
 const DEFAULT_SEATS: Seat[] = [
     { id: 'A1', zone: 'A', zoneName: 'Entrance Side', status: 'available' },
@@ -46,6 +49,14 @@ async function ensureSeatsFile() {
     try {
         await fs.access(SEATS_FILE);
     } catch {
+        if (isVercel) {
+            try {
+                const localPath = path.join(process.cwd(), 'data', 'seats.json');
+                const localData = await fs.readFile(localPath, 'utf-8');
+                await fs.writeFile(SEATS_FILE, localData, 'utf-8');
+                return;
+            } catch (err) { }
+        }
         await fs.writeFile(SEATS_FILE, JSON.stringify(DEFAULT_SEATS, null, 2), 'utf-8');
     }
 }

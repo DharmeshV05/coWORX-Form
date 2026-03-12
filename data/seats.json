@@ -3,13 +3,13 @@
     "id": "A1",
     "zone": "A",
     "zoneName": "Entrance Side",
-    "status": "reserved"
+    "status": "occupied"
   },
   {
     "id": "A2",
     "zone": "A",
     "zoneName": "Entrance Side",
-    "status": "available"
+    "status": "occupied"
   },
   {
     "id": "A3",
@@ -27,19 +27,19 @@
     "id": "A5",
     "zone": "A",
     "zoneName": "Entrance Side",
-    "status": "available"
+    "status": "occupied"
   },
   {
     "id": "A6",
     "zone": "A",
     "zoneName": "Entrance Side",
-    "status": "available"
+    "status": "occupied"
   },
   {
     "id": "B1",
     "zone": "B",
     "zoneName": "Behind Zone A",
-    "status": "reserved"
+    "status": "occupied"
   },
   {
     "id": "C1",
@@ -51,19 +51,19 @@
     "id": "C2",
     "zone": "C",
     "zoneName": "Right Wall",
-    "status": "available"
+    "status": "occupied"
   },
   {
     "id": "C3",
     "zone": "C",
     "zoneName": "Right Wall",
-    "status": "available"
+    "status": "occupied"
   },
   {
     "id": "D1",
     "zone": "D",
     "zoneName": "Behind Zone C",
-    "status": "available"
+    "status": "occupied"
   },
   {
     "id": "D2",
@@ -75,13 +75,13 @@
     "id": "D3",
     "zone": "D",
     "zoneName": "Behind Zone C",
-    "status": "available"
+    "status": "occupied"
   },
   {
     "id": "D4",
     "zone": "D",
     "zoneName": "Behind Zone C",
-    "status": "available"
+    "status": "occupied"
   },
   {
     "id": "D5",
@@ -93,7 +93,7 @@
     "id": "D6",
     "zone": "D",
     "zoneName": "Behind Zone C",
-    "status": "available"
+    "status": "occupied"
   },
   {
     "id": "CR1",

@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 import { useState, useEffect } from 'react'
 import { useForm } from 'react-hook-form'
@@ -35,6 +35,7 @@ const membershipTypes: MembershipType[] = [
   'Private Office',
   'Virtual Office',
   'Day Pass / Hourly Access',
+  'Day Pass (â‚¹299/day)',
   'Weekly Plan',
   'Monthly Plan',
 ]
@@ -47,9 +48,9 @@ interface AvailableSeat {
 }
 
 const zoneLabels: Record<string, string> = {
-  A: 'Zone A · Entrance',
+  A: 'Zone A Â· Entrance',
   B: 'Zone B',
-  C: 'Zone C · Right Wall',
+  C: 'Zone C Â· Right Wall',
   D: 'Zone D',
   CR: 'Conference Room',
 }
@@ -293,7 +294,7 @@ export function InquiryForm({ onSuccess }: InquiryFormProps) {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel className="flex items-center gap-2">
-                    <Armchair className="h-4 w-4 text-orange-500" />
+                    <Armchair className="h-4 w-4 text-[#f5a623]" />
                     Seat Preference (Optional)
                   </FormLabel>
                   <Select
@@ -325,7 +326,7 @@ export function InquiryForm({ onSuccess }: InquiryFormProps) {
                               <span className="flex items-center gap-2">
                                 <span className="w-2 h-2 rounded-full bg-green-500 inline-block" />
                                 Seat {seat.id}
-                                <span className="text-xs text-slate-400">· {seat.zoneName}</span>
+                                <span className="text-xs text-slate-400">Â· {seat.zoneName}</span>
                               </span>
                             </SelectItem>
                           ))}
@@ -334,7 +335,7 @@ export function InquiryForm({ onSuccess }: InquiryFormProps) {
                     </SelectContent>
                   </Select>
                   <p className="text-xs text-slate-400 mt-1">
-                    {availableSeats.length} seat{availableSeats.length !== 1 ? 's' : ''} available · Selecting a seat will reserve it for you
+                    {availableSeats.length} seat{availableSeats.length !== 1 ? 's' : ''} available Â· Selecting a seat will reserve it for you
                   </p>
                   <FormMessage />
                 </FormItem>
@@ -362,7 +363,7 @@ export function InquiryForm({ onSuccess }: InquiryFormProps) {
 
             <Button
               type="submit"
-              className="w-full bg-orange-600 hover:bg-orange-700 text-white"
+              className="w-full bg-[#f5a623] hover:bg-[#d4a012] text-white"
               disabled={isSubmitting}
             >
               {isSubmitting ? (

@@ -2,7 +2,10 @@ import fs from 'fs/promises';
 import path from 'path';
 import type { Inquiry, CreateInquiryInput } from '@/types/inquiry';
 
-const DATA_FILE_PATH = path.join(process.cwd(), 'data', 'inquiries.json');
+const isVercel = !!process.env.VERCEL;
+const DATA_FILE_PATH = isVercel
+  ? path.join('/tmp', 'inquiries.json')
+  : path.join(process.cwd(), 'data', 'inquiries.json');
 
 // Ensure data directory and file exist
 async function ensureDataFile() {
@@ -16,6 +19,17 @@ async function ensureDataFile() {
   try {
     await fs.access(DATA_FILE_PATH);
   } catch {
+    if (isVercel) {
+      // Try to copy existing data from the bundled project files as a starting point
+      try {
+        const localPath = path.join(process.cwd(), 'data', 'inquiries.json');
+        const localData = await fs.readFile(localPath, 'utf-8');
+        await fs.writeFile(DATA_FILE_PATH, localData, 'utf-8');
+        return;
+      } catch (err) {
+        // Fallback if local file not found
+      }
+    }
     await fs.writeFile(DATA_FILE_PATH, '[]', 'utf-8');
   }
 }

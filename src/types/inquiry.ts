@@ -4,6 +4,7 @@ export type MembershipType =
   | "Private Office"
   | "Virtual Office"
   | "Day Pass / Hourly Access"
+  | "Day Pass (₹299/day)"
   | "Weekly Plan"
   | "Monthly Plan";
 
