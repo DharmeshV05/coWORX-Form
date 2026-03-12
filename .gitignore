@@ -10,6 +10,16 @@ node_modules
 !.yarn/releases
 !.yarn/versions
 
+#.agents / workflows
+add-components.md
+build.md
+deploy.md
+dev.md
+kill.md
+merge.md
+push.md
+website-updates.md
+
 # testing
 /coverage
 
@@ -31,12 +41,13 @@ yarn-error.log*
 .pnpm-debug.log*
 
 # env files (can opt-in for committing if needed)
-.env*
+.env.local
+.env
 
 # vercel
 .vercel
 
-# typescript
+# typescripts
 *.tsbuildinfo
 next-env.d.ts
 local-*

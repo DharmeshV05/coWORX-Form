@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 import { useState, useRef, useEffect } from 'react'
 import Image from 'next/image'
@@ -12,6 +12,7 @@ import {
   Building2, Sparkles, Heart
 } from 'lucide-react'
 import { motion, AnimatePresence, useInView } from 'framer-motion'
+import { Input } from '@/components/ui/input'
 
 const plans = [
   { name: 'Daily', duration: '2 Hours', price: 100, popular: false },
@@ -81,16 +82,19 @@ const testimonials = [
   },
 ]
 
-const stats = [
-  { number: '10+', label: 'Active Members' },
-  { number: '100', label: 'Mbps WiFi' },
-  { number: '24/7', label: 'Power Backup' },
-]
+// const stats = [
+//   { number: '10+', label: 'Active Members' },
+//   { number: '100', label: 'Mbps WiFi' },
+//   { number: '24/7', label: 'Power Backup' },
+// ]
 
 export default function Home() {
   const [isVideoPlaying, setIsVideoPlaying] = useState(true)
   const [selectedImage, setSelectedImage] = useState<number | null>(null)
   const [currentTestimonial, setCurrentTestimonial] = useState(0)
+  const [email, setEmail] = useState('')
+  const [isSubscribing, setIsSubscribing] = useState(false)
+  const [subscribeStatus, setSubscribeStatus] = useState<'idle' | 'success' | 'error'>('idle')
 
   const plansRef = useRef<HTMLDivElement>(null)
   const galleryRef = useRef<HTMLDivElement>(null)
@@ -120,6 +124,33 @@ export default function Home() {
         videoRef.current.play()
       }
       setIsVideoPlaying(!isVideoPlaying)
+    }
+  }
+
+  const handleSubscribe = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setIsSubscribing(true)
+    setSubscribeStatus('idle')
+
+    try {
+      const res = await fetch('/api/subscribe', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email }),
+      })
+
+      if (res.ok) {
+        setSubscribeStatus('success')
+        setEmail('')
+        // Optionally reset success status after sometime
+        setTimeout(() => setSubscribeStatus('idle'), 5000)
+      } else {
+        setSubscribeStatus('error')
+      }
+    } catch (err) {
+      setSubscribeStatus('error')
+    } finally {
+      setIsSubscribing(false)
     }
   }
 
@@ -168,13 +199,14 @@ export default function Home() {
               >
                 <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-white text-xs font-bold uppercase tracking-wider mb-6">
                   <MapPin className="h-3.5 w-3.5 text-[#f5a623]" />
-                  Poonam Avenue, Global City, Virar West
+                  Global City, Virar West
                   <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
                 </div>
                 <h1 className="text-5xl md:text-7xl lg:text-8xl font-extrabold tracking-tight text-white leading-[1.05]">
-                  Work Smart.{' '}
+                  Work Smart
+                  <br />
                   <span className="bg-gradient-to-r from-[#f5a623] via-[#d4a012] to-[#d4a012] bg-clip-text text-transparent">
-                    Grow Together.
+                    Grow Together
                   </span>
                 </h1>
               </motion.div>
@@ -188,6 +220,50 @@ export default function Home() {
                 Experience premium coworking designed for productivity,
                 collaboration, and community in the heart of Virar.
               </motion.p>
+
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.7, delay: 0.4 }}
+                className="max-w-md mx-auto relative group mt-8 mb-4"
+              >
+                <div className="absolute -inset-1 bg-gradient-to-r from-[#f5a623] to-[#d4a012] rounded-full blur opacity-25 group-hover:opacity-50 transition duration-1000 group-hover:duration-200"></div>
+                <form onSubmit={handleSubscribe} className="relative flex p-1 bg-white/5 backdrop-blur-xl border border-white/20 rounded-full shadow-2xl overflow-hidden">
+                  <Input
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="Get Day 1 Free Pass for email subscribe"
+                    className="flex-1 bg-transparent border-0 focus-visible:ring-0 focus-visible:ring-offset-0 text-white placeholder:text-white/40 h-12 px-6"
+                    required
+                    disabled={isSubscribing}
+                  />
+                  <Button
+                    type="submit"
+                    disabled={isSubscribing}
+                    className="bg-[#f5a623] hover:bg-[#d4a012] text-white font-bold h-12 px-8 rounded-full shadow-lg active:scale-95 transition-all disabled:opacity-70"
+                  >
+                    {isSubscribing ? 'Processing...' : 'Get Free Pass'}
+                  </Button>
+                </form>
+                <div className="mt-3 min-h-[20px]">
+                  {subscribeStatus === 'success' && (
+                    <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-[10px] text-green-400 font-bold uppercase tracking-widest flex items-center justify-center gap-1.5">
+                      <CheckCircle2 className="h-3 w-3" /> Check your email for the pass!
+                    </motion.p>
+                  )}
+                  {subscribeStatus === 'error' && (
+                    <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-[10px] text-red-400 font-bold uppercase tracking-widest flex items-center justify-center gap-1.5">
+                      Something went wrong. Try again.
+                    </motion.p>
+                  )}
+                  {subscribeStatus === 'idle' && (
+                    <p className="text-[10px] text-white/50 font-medium uppercase tracking-widest flex items-center justify-center gap-1.5">
+                      <Sparkles className="h-3 w-3 text-[#f5a623]" /> Join 5+ members
+                    </p>
+                  )}
+                </div>
+              </motion.div>
 
               <motion.div
                 initial={{ opacity: 0, scale: 0.95 }}
@@ -218,7 +294,7 @@ export default function Home() {
               </motion.div>
 
               {/* Stats Bar */}
-              <motion.div
+              {/* <motion.div
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.8 }}
@@ -230,7 +306,7 @@ export default function Home() {
                     <p className="text-xs md:text-sm text-white/60 mt-1">{stat.label}</p>
                   </div>
                 ))}
-              </motion.div>
+              </motion.div> */}
             </div>
           </div>
 
@@ -269,7 +345,7 @@ export default function Home() {
                 Everything You <span className="text-[#f5a623]">Need</span>
               </h2>
               <p className="text-base md:text-lg text-slate-600 dark:text-slate-400 max-w-xl mx-auto">
-                From lightning-fast internet to unlimited beverages — we've got your workspace covered.
+                From lightning-fast internet to unlimited beverages - we've got your workspace covered.
               </p>
             </motion.div>
 
@@ -279,7 +355,7 @@ export default function Home() {
                 { icon: Coffee, label: 'Unlimited Coffee', sub: 'Premium coffee & beverages 24/7', color: 'from-[#d4a012] to-[#d4a012]' },
                 { icon: Users, label: 'Meeting Rooms', sub: 'Professional spaces for 2-4 people', color: 'from-purple-500 to-pink-500' },
                 { icon: Zap, label: 'Power Backup', sub: 'UPS + Generator for zero downtime', color: 'from-green-500 to-emerald-500' },
-                { icon: Monitor, label: 'Ergonomic Setup', sub: 'Chairs & Desks', color: 'from-indigo-500 to-blue-500' },
+                { icon: Monitor, label: 'Ergonomic Setup', sub: 'Chairs & Desk', color: 'from-indigo-500 to-blue-500' },
                 { icon: Shield, label: 'Secure Access', sub: 'CCTV surveillance', color: 'from-red-500 to-rose-500' },
                 { icon: Building2, label: 'Prime Location', sub: 'Poonam Avenue, Global City, Virar West', color: 'from-teal-500 to-cyan-500' },
                 { icon: Heart, label: 'Community', sub: 'Networking & Workshops', color: 'from-pink-500 to-rose-500' },
@@ -295,13 +371,21 @@ export default function Home() {
                       window.open('https://forms.gle/xtAyNM2YgHL76QfQ9', '_blank')
                     }
                   }}
-                  className={`group p-6 rounded-2xl bg-slate-50/80 dark:bg-[#1e3a5f]/50 backdrop-blur-md border border-slate-200/50 dark:border-slate-800/50 hover:bg-white dark:hover:bg-slate-900 transition-all duration-300 shadow-sm hover:shadow-xl hover:-translate-y-1.5 ${feature.label === 'Prime Location' ? 'cursor-pointer' : ''}`}
+                  className={`group p-7 rounded-3xl bg-slate-50/80 dark:bg-[#1e3a5f]/50 backdrop-blur-md border border-slate-200/50 dark:border-slate-800/50 hover:bg-white dark:hover:bg-slate-900 transition-all duration-500 shadow-sm hover:shadow-2xl hover:-translate-y-2 ${feature.label === 'Prime Location' ? 'cursor-pointer' : ''}`}
                 >
-                  <div className={`h-12 w-12 rounded-xl bg-gradient-to-br ${feature.color} flex items-center justify-center mb-4 group-hover:scale-110 group-hover:rotate-3 transition-all duration-300 shadow-lg`}>
-                    <feature.icon className="h-6 w-6 text-white" />
+                  <div className="flex justify-center mb-6">
+                    <div className={`h-14 w-14 rounded-2xl bg-gradient-to-br ${feature.color} flex items-center justify-center group-hover:scale-110 group-hover:rotate-6 transition-all duration-500 shadow-lg`}>
+                      <feature.icon className="h-7 w-7 text-white" />
+                    </div>
                   </div>
-                  <h3 className="font-bold text-sm md:text-base text-[#1e3a5f] dark:text-white">{feature.label}</h3>
-                  <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">{feature.sub}</p>
+                  <div className="text-left">
+                    <h3 className="font-extrabold text-lg md:text-xl text-[#1e3a5f] dark:text-white leading-tight">
+                      {feature.label}
+                    </h3>
+                    <p className="text-sm text-slate-600 dark:text-slate-400 mt-2 leading-relaxed font-medium">
+                      {feature.sub}
+                    </p>
+                  </div>
                 </motion.div>
               ))}
             </div>
@@ -363,7 +447,7 @@ export default function Home() {
                   <span className="bg-gradient-to-r from-[#f5a623] to-[#d4a012] bg-clip-text text-transparent">Pricing</span>
                 </h2>
                 <p className="text-base md:text-lg text-slate-300 leading-relaxed">
-                  &ldquo;Work smarter, connect deeper, grow faster — start your journey with us.&rdquo;
+                  &ldquo;Work smarter, connect deeper, grow faster - start your journey with us.&rdquo;
                 </p>
 
                 {/* Benefits */}
@@ -488,16 +572,15 @@ export default function Home() {
                   <span className="text-[#f5a623]">Workspace</span>
                 </h2>
                 <p className="text-base md:text-lg text-slate-600 dark:text-slate-400 leading-relaxed">
-                  coWORX is a premium coworking space at a prime location — Poonam Avenue, Global City, Virar West.
-                  We've built a space where freelancers, startups, and remote teams can thrive — surrounded
+                  coWORX is a premium coworking space at a prime location - Poonam Avenue, Global City, Virar West.
+                  We've built a space where freelancers, startups, and remote teams can thrive surrounded
                   by like-minded professionals in an environment designed for focus and creativity.
                 </p>
                 <ul className="space-y-3">
                   {[
                     'Air-conditioned, beautifully designed interiors',
                     'Comfortable ergonomic seating for long work hours',
-                    'Professional-grade meeting rooms with AV setup',
-                    'Community kitchen with unlimited beverages',
+                    'Community  with unlimited coffee and beverages',
                     'Regular networking events and workshops',
                   ].map((item) => (
                     <li key={item} className="flex items-start gap-3">
@@ -545,7 +628,7 @@ export default function Home() {
                 Explore Our <span className="text-[#f5a623]">Beautiful Space</span>
               </h2>
               <p className="text-base md:text-lg text-slate-600 dark:text-slate-400 max-w-xl mx-auto">
-                Designed for focus, comfort, and collaboration — take a peek at where the magic happens.
+                Designed for focus, comfort, and collaboration - take a peek at where the magic happens.
               </p>
             </motion.div>
 
@@ -696,7 +779,7 @@ export default function Home() {
                 Choose Your <span className="text-[#f5a623]">Perfect Plan</span>
               </h2>
               <p className="text-base md:text-lg text-slate-600 dark:text-slate-400 max-w-xl mx-auto">
-                From daily passes to team packages — pick the plan that fits your work style and budget.
+                From daily passes to team packages - pick the plan that fits your work style and budget.
               </p>
             </motion.div>
 
@@ -796,7 +879,7 @@ export default function Home() {
                 What Our <span className="text-[#f5a623]">Members Say</span>
               </h2>
               <p className="text-base md:text-lg text-slate-600 dark:text-slate-400 max-w-xl mx-auto">
-                Don't just take our word for it — hear from the professionals who chose coWORX.
+                Don't just take our word for it - hear from the professionals who chose coWORX.
               </p>
             </motion.div>
 
@@ -874,7 +957,7 @@ export default function Home() {
                 Find Us <span className="text-[#f5a623]">Here</span>
               </h2>
               <p className="text-base md:text-lg text-slate-600 dark:text-slate-400 max-w-xl mx-auto">
-                Conveniently located at Poonam Avenue, Global City, Virar West — a prime location easily accessible via road & rail.
+                Conveniently located at Poonam Avenue, Global City, Virar West - a prime location easily accessible via road & rail.
               </p>
             </motion.div>
 
@@ -934,7 +1017,7 @@ export default function Home() {
                       </div>
                       <div>
                         <p className="font-semibold text-sm text-[#1e3a5f] dark:text-white">Email</p>
-                        <p className="text-sm text-slate-600 dark:text-slate-400">hello@coworx.app</p>
+                        <p className="text-sm text-slate-600 dark:text-slate-400">gohil@coworx.app</p>
                       </div>
                     </div>
                     <div className="flex items-start gap-3">
@@ -943,7 +1026,7 @@ export default function Home() {
                       </div>
                       <div>
                         <p className="font-semibold text-sm text-[#1e3a5f] dark:text-white">Hours</p>
-                        <p className="text-sm text-slate-600 dark:text-slate-400">Mon–Sat: 9:00 AM – 10:00 PM</p>
+                        <p className="text-sm text-slate-600 dark:text-slate-400">Mon–Sat: 10:00 AM – 10:00 PM</p>
                         <p className="text-sm text-slate-600 dark:text-slate-400">Sunday: By appointment</p>
                       </div>
                     </div>
@@ -1038,7 +1121,7 @@ export default function Home() {
                 </div>
                 <div className="flex items-center gap-2">
                   <Mail className="h-4 w-4 text-[#f5a623]" />
-                  <span>hello@coworx.app</span>
+                  <span>gohil@coworx.app</span>
                 </div>
               </div>
             </div>
