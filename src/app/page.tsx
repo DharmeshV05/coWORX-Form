@@ -233,7 +233,7 @@ export default function Home() {
                     type="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    placeholder="Get Day 1 Free Pass for email subscribe"
+                    placeholder="Get Your Free Pass Now"
                     className="flex-1 bg-transparent border-0 focus-visible:ring-0 focus-visible:ring-offset-0 text-white placeholder:text-white/40 h-12 px-6"
                     required
                     disabled={isSubscribing}
