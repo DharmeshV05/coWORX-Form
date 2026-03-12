@@ -139,7 +139,6 @@ export default function Home() {
               loop
               playsInline
               className="w-full h-full object-cover"
-              poster="/images/main.jpeg"
             >
               <source
                 src="https://videos.pexels.com/video-files/3255275/3255275-uhd_2560_1440_25fps.mp4"
