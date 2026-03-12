@@ -10,15 +10,6 @@ node_modules
 !.yarn/releases
 !.yarn/versions
 
-#.agents / workflows
-add-components.md
-build.md
-deploy.md
-dev.md
-kill.md
-merge.md
-push.md
-website-updates.md
 
 # testing
 /coverage

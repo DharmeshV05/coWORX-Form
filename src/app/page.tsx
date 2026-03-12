@@ -233,7 +233,7 @@ export default function Home() {
                     type="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    placeholder="Get Your Free Pass Now"
+                    placeholder="Get Day 1 Free Pass"
                     className="flex-1 bg-transparent border-0 focus-visible:ring-0 focus-visible:ring-offset-0 text-white placeholder:text-white/40 h-12 px-6"
                     required
                     disabled={isSubscribing}
@@ -243,7 +243,7 @@ export default function Home() {
                     disabled={isSubscribing}
                     className="bg-[#f5a623] hover:bg-[#d4a012] text-white font-bold h-12 px-8 rounded-full shadow-lg active:scale-95 transition-all disabled:opacity-70"
                   >
-                    {isSubscribing ? 'Processing...' : 'Get Free Pass'}
+                    {isSubscribing ? 'Processing...' : 'Get Your Free Pass Now'}
                   </Button>
                 </form>
                 <div className="mt-3 min-h-[20px]">
